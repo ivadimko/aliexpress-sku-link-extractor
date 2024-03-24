@@ -5,8 +5,8 @@ document.addEventListener('WindowRunParamsData', function(e) {
 });
 
 function injectScript(file_path, tag) {
-    var node = document.getElementsByTagName(tag)[0];
-    var script = document.createElement('script');
+    const node = document.getElementsByTagName(tag)[0];
+    const script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('src', file_path);
     node.appendChild(script);
@@ -25,18 +25,31 @@ function injectCopyButtons() {
 
             // Add click event listener for copying the product link
             copyBtn.addEventListener('click', () => {
+                const skuJson = JSON.parse(data.priceComponent.skuJson);
                 const productUrlMatch = window.location.href.match(/.*(aliexpress.*\.html)/);
+
                 if (productUrlMatch) {
                     const productUrl = `https://${productUrlMatch[1]}`;
-                    const selectedSkuCol = skuColElement.getAttribute('data-sku-col').replace("-", ":");
-                    const skuJson = JSON.parse(data.priceComponent.skuJson);
-                    const selectedSku = skuJson.find(i => i.skuAttr.includes(selectedSkuCol));
+                    // get all selected elements
+                    const allSelectedElements = Array.from(document.querySelectorAll('[data-sku-col][class*="sku-item--selected"]'));
+
+                    const attrValuesArray = allSelectedElements.map(sel => sel.getAttribute('data-sku-col').replace('-', ':'));
+
+                    // find element that stands for all selected parameters
+                    const selectedSku = skuJson.find((jsonItem) => {
+                        return attrValuesArray.every((attrValue) => jsonItem.skuAttr.includes(attrValue));
+                    });
 
                     if (selectedSku) {
-                        const linkToCopy = `${productUrl}?skuId=${selectedSku.skuIdStr}`;
+                        const linkToCopy = `${productUrl}?skuAttr=${encodeURIComponent(selectedSku.skuAttr)}&skuId=${encodeURIComponent(selectedSku.skuIdStr)}`;
                         navigator.clipboard.writeText(linkToCopy)
-                            .then(() => alert('Link copied to clipboard!'))
+                            .then(() => {
+                                copyBtn.textContent = 'Copied!';
+                                setTimeout(() => copyBtn.textContent = 'Copy', 1000);
+                            })
                             .catch(err => console.error('Error copying link to clipboard:', err));
+                    } else {
+                        console.error('item mot found in skuJson')
                     }
                 }
             });
