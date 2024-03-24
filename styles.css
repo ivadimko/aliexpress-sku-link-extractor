@@ -1,11 +1,24 @@
 [data-sku-col][class*="sku-item--selected"] .copy-link-btn {
     display: block;
     position: absolute;
-    bottom: calc(100% + 5px);
+    bottom: calc(100% + 8px);
     right: 5px;
     z-index: 1000;
+    padding: 3px 10px;
+    border-radius: 4px;
+    box-shadow: 2px 2px 4px #00000050;
+    transition: box-shadow .1s ease-in;
+    cursor: pointer;
 }
 
 .copy-link-btn {
     display: none; /* Default state is hidden */
+}
+
+[data-sku-col][class*="sku-item--selected"] .copy-link-btn:hover {
+    box-shadow: 0 0 2px #00000050;
+}
+
+[data-sku-col][class*="sku-item--selected"] .copy-link-btn:active {
+    box-shadow: none;
 }
