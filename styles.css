@@ -1,0 +1,11 @@
+[data-sku-col][class*="sku-item--selected"] .copy-link-btn {
+    display: block;
+    position: absolute;
+    bottom: calc(100% + 5px);
+    right: 5px;
+    z-index: 1000;
+}
+
+.copy-link-btn {
+    display: none; /* Default state is hidden */
+}
