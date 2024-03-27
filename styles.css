@@ -1,7 +1,7 @@
 [data-sku-col][class*="sku-item--selected"] .copy-link-btn {
     display: block;
     position: absolute;
-    bottom: calc(100% + 8px);
+    bottom: -30px;
     right: 5px;
     z-index: 1000;
     padding: 3px 10px;
